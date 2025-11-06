@@ -1,127 +1,122 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/stores/authStore";
-import Navbar from "@/components/Navbar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Briefcase, ListOrdered, User } from "lucide-react";
+import { useStore } from "@/lib/store";
+import DashboardCard from "@/components/DashboardCard";
+import BottomNav from "@/components/BottomNav";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Coins,
+  Briefcase,
+  CheckCircle,
+  MessageCircle,
+  TrendingUp,
+  Tag,
+} from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const Dashboard = () => {
-  const { user } = useAuthStore();
-  const navigate = useNavigate();
+export default function Dashboard() {
+  const { currentUser, posts } = useStore();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/auth");
-    }
-  }, [user, navigate]);
-
-  if (!user) return null;
+  const myPosts = posts.filter((p) => p.userId === currentUser?.id);
+  const totalLikes = myPosts.reduce((sum, p) => sum + p.likes.length, 0);
+  const totalComments = myPosts.reduce((sum, p) => sum + p.comments.length, 0);
+  const totalBids = myPosts.reduce((sum, p) => sum + p.bids.length, 0);
 
   return (
-    <>
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            Your <span className="text-gradient">Dashboard</span>
+    <div className="min-h-screen bg-background pb-20">
+      <header className="sticky top-0 z-40 bg-card border-b border-card-border">
+        <div className="max-w-lg mx-auto p-4">
+          <h1 className="text-xl font-bold" data-testid="text-dashboard-title">
+            Dashboard
           </h1>
-          <p className="text-muted-foreground">Manage your jobs, bids, and profile</p>
         </div>
+      </header>
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-3">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="jobs">Jobs</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="shadow-card border-2 hover:shadow-hover transition-all">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-primary" />
-                    <CardTitle>Active Jobs</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-4xl font-bold text-gradient">0</p>
-                  <CardDescription>Jobs you're working on</CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-card border-2 hover:shadow-hover transition-all">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <ListOrdered className="h-5 w-5 text-secondary" />
-                    <CardTitle>Total Bids</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-4xl font-bold text-gradient">0</p>
-                  <CardDescription>Proposals submitted</CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-card border-2 hover:shadow-hover transition-all">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-accent" />
-                    <CardTitle>Profile</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-4xl font-bold text-gradient">100%</p>
-                  <CardDescription>Profile completion</CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="shadow-card border-2">
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Your latest actions on the platform</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-muted-foreground py-8">
-                  No recent activity yet. Start by browsing jobs!
-                </p>
-              </CardContent>
+      <ScrollArea className="h-[calc(100vh-8rem)]">
+        <div className="max-w-lg mx-auto p-4 space-y-4">
+          {currentUser && (
+            <Card className="p-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-16 h-16 border-2 border-primary">
+                  <AvatarImage
+                    src={currentUser.avatar}
+                    alt={currentUser.username}
+                  />
+                  <AvatarFallback>
+                    {currentUser.username[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h2
+                    className="font-bold text-lg"
+                    data-testid="text-dashboard-username"
+                  >
+                    {currentUser.username}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {currentUser.bio}
+                  </p>
+                </div>
+              </div>
             </Card>
-          </TabsContent>
+          )}
 
-          <TabsContent value="jobs">
-            <Card className="shadow-card border-2">
-              <CardHeader>
-                <CardTitle>Your Jobs</CardTitle>
-                <CardDescription>Jobs you've posted or applied to</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-muted-foreground py-8">
-                  No jobs yet. Visit the homepage to find opportunities!
-                </p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <div className="grid grid-cols-2 gap-3">
+            <DashboardCard
+              title="Token Saya"
+              value={currentUser?.tokens.toLocaleString("id-ID") || "0"}
+            />
+            <DashboardCard title="Total Postingan" value={myPosts.length} />
+            <DashboardCard title="Total Suka" value={totalLikes} />
+            <DashboardCard title="Total Komentar" value={totalComments} />
+            <DashboardCard title="Total Penawaran" value={totalBids} />
+            <DashboardCard title="Rating" value="4.9" description="35 ulasan" />
+          </div>
 
-          <TabsContent value="profile">
-            <Card className="shadow-card border-2">
-              <CardHeader>
-                <CardTitle>Profile Settings</CardTitle>
-                <CardDescription>Manage your account information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-muted-foreground py-8">
-                  Profile settings coming soon!
-                </p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </>
+          <div>
+            <h3
+              className="font-semibold mb-3"
+              data-testid="text-activity-title"
+            >
+              Aktivitas Terbaru
+            </h3>
+            {myPosts.length === 0 ? (
+              <Card className="p-8 text-center">
+                <p className="text-muted-foreground">Belum ada postingan</p>
+              </Card>
+            ) : (
+              <div className="space-y-3">
+                {myPosts.slice(0, 5).map((post) => (
+                  <Card
+                    key={post.id}
+                    className="p-4 hover-elevate"
+                    data-testid={`card-activity-${post.id}`}
+                  >
+                    <div className="flex gap-3">
+                      <img
+                        src={post.image}
+                        alt={post.description}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">
+                          {post.description}
+                        </p>
+                        <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                          <span>{post.likes.length} suka</span>
+                          <span>{post.comments.length} komentar</span>
+                          <span>{post.bids.length} penawaran</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </ScrollArea>
+
+      <BottomNav />
+    </div>
   );
-};
-
-export default Dashboard;
+}

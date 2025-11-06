@@ -1,0 +1,74 @@
+# 🚀 Prompt — Aplikasi KerjaAja (UI Only, Mobile-First + LocalStorage)
+
+## 🎯 Tujuan
+Buat **UI aplikasi web mobile-first** bernama **KerjaAja**, platform freelancing bergaya **media sosial** seperti **TikTok/Instagram**, di mana pengguna dapat mengunggah **foto atau video pekerjaan** — baik untuk mencari jasa maupun menawarkan keahlian.  
+Setiap pengguna bisa berperan sebagai **Job Maker** atau **Job Seeker** secara fleksibel.
+
+---
+
+## 🧠 Fokus
+- Hanya **frontend/UI**, tanpa backend.  
+- Gunakan **LocalStorage** untuk menyimpan data seperti post, like, komentar, dan profil pengguna.  
+- **Desain mobile-first**, tampil optimal di smartphone.
+
+---
+
+## 🧩 Tech Stack
+- **React**
+- **Zustand** untuk state management sederhana
+- **React Hook Form** untuk form upload/posting
+- **Radix UI** untuk komponen dasar (modal, bottom sheet, dialog, dll)
+- **LocalStorage** untuk penyimpanan data dummy
+
+---
+
+## 🧠 Fitur UI Utama
+- **Feed utama vertikal** seperti TikTok/Reels (scroll foto/video pekerjaan)
+- **Posting baru** (unggah foto/video + deskripsi pekerjaan)
+- **Like**, **Komentar**, dan **Bid (Tawar)**
+- **Profil pengguna** dengan avatar, bio, dan daftar postingan
+- **Dashboard sederhana** (token dummy, aktivitas, posting)
+- **Navigasi bawah (bottom navbar)** bergaya aplikasi mobile
+- **Search & filter pekerjaan**
+- **Responsif penuh untuk mobile**, dengan dukungan gesture & animasi lembut
+
+---
+
+## 🎨 Tema UI
+**Retro-Modern Ceria**
+
+Palet warna:
+- `#F0E491` — Light Yellow (warna dasar cerah)
+- `#BBC863` — Light Greenish-Yellow (tone lembut)
+- `#31694E` — Deep Green (kontras profesional)
+- `#658C58` — Muted Green (warna pelengkap)
+
+Style guide:
+- Tampilan **ceria, playful, dan retro-modern**
+- Tipografi **bold & readable di layar kecil**
+- Komponen **rounded & clean**
+- **Animasi lembut CSS** saat scroll, hover, atau transisi antar halaman
+
+---
+
+## 📦 Output yang Diharapkan
+- Struktur folder React modular dan mudah dikembangkan  
+- Komponen utama:
+  - **Navbar (Bottom Navigation)**
+  - **FeedCard** (foto/video + deskripsi + tombol interaksi)
+  - **CommentSection**
+  - **UploadForm** (post pekerjaan baru)
+  - **TokenButton**
+- Halaman utama:
+  - **Home / Feed**
+  - **Post Detail**
+  - **Profil**
+  - **Dashboard**
+- Simpan semua data (postingan, komentar, profil, token dummy) di **LocalStorage**
+- Semua teks UI dalam **Bahasa Indonesia**
+- Penamaan variabel & file dalam **Bahasa Inggris**
+
+---
+
+**Singkatnya:**  
+Bangun **UI mobile-first** namun juga harus terlihat bagus pada web, untuk aplikasi freelancing sosial bernama **KerjaAja**, dengan gaya **retro-modern ceria**, interaksi seperti TikTok/Instagram, dan data dummy disimpan di **LocalStorage** — tanpa backend namun semua fungsi dapat berjalan dengan menyimpan data ke localstorage.
