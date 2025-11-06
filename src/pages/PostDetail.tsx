@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import CommentSheet from "@/components/CommentSheet";
 import BidSheet from "@/components/BidSheet";
 import BottomNav from "@/components/BottomNav";
@@ -77,14 +84,35 @@ export default function PostDetail() {
 
       <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="max-w-lg mx-auto">
-          <div className="aspect-square bg-muted">
-            <img
-              src={post.image}
-              alt={post.description}
-              className="w-full h-full object-cover"
-              data-testid="img-post-detail"
-            />
-          </div>
+          {post.images && post.images.length > 1 ? (
+            <Carousel className="w-full">
+              <CarouselContent>
+                {post.images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="aspect-square bg-muted">
+                      <img
+                        src={image}
+                        alt={`${post.description} - ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        data-testid={`img-post-detail-${index}`}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          ) : (
+            <div className="aspect-square bg-muted">
+              <img
+                src={post.images?.[0] || ""}
+                alt={post.description}
+                className="w-full h-full object-cover"
+                data-testid="img-post-detail"
+              />
+            </div>
+          )}
 
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between">
@@ -111,9 +139,18 @@ export default function PostDetail() {
                   </p>
                 </div>
               </div>
-              <Badge variant="default" data-testid="badge-detail-category">
-                {post.category}
-              </Badge>
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              {post.categories?.map((category, index) => (
+                <Badge
+                  key={index}
+                  variant="default"
+                  data-testid={`badge-detail-category-${index}`}
+                >
+                  {category}
+                </Badge>
+              ))}
             </div>
 
             <div>

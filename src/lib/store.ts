@@ -13,9 +13,9 @@ export interface Post {
   userId: string;
   username: string;
   avatar: string;
-  image: string;
+  images: string[];
   description: string;
-  category: string;
+  categories: string[];
   likes: string[];
   comments: Comment[];
   bids: Bid[];

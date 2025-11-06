@@ -32,7 +32,8 @@ export default function Search() {
       post.username.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesCategory =
-      selectedCategory === "Semua" || post.category === selectedCategory;
+      selectedCategory === "Semua" || 
+      (post.categories && post.categories.includes(selectedCategory));
 
     return matchesSearch && matchesCategory;
   });

@@ -20,9 +20,9 @@ export default function Upload() {
         userId: currentUser.id,
         username: currentUser.username,
         avatar: currentUser.avatar,
-        image: data.image,
+        images: [data.image],
         description: data.description,
-        category: data.category,
+        categories: [data.category],
       });
       setLocation('/');
     }

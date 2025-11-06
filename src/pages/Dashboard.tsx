@@ -93,7 +93,7 @@ export default function Dashboard() {
                   >
                     <div className="flex gap-3">
                       <img
-                        src={post.image}
+                        src={post.images?.[0] || ""}
                         alt={post.description}
                         className="w-16 h-16 rounded-lg object-cover"
                       />

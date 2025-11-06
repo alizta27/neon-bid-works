@@ -50,55 +50,55 @@ export default function Home() {
           userId: "user2",
           username: "DesainKreatif",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kreatif",
-          image: designImage,
+          images: [designImage, webdevImage],
           description:
             "Butuh desainer grafis profesional untuk branding bisnis Anda? Saya punya pengalaman 5+ tahun dalam desain logo, packaging, dan visual identity. Portfolio lengkap tersedia! 🎨",
-          category: "Desain Grafis",
+          categories: ["Desain Grafis", "Marketing"],
         },
         {
           userId: "user3",
           username: "TukangAhli",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tukang",
-          image: renovationImage,
+          images: [renovationImage],
           description:
             "Jasa renovasi rumah & kantor terpercaya! Pengalaman 10 tahun, hasil rapi dan tepat waktu. Konsultasi gratis untuk proyek Anda.",
-          category: "Renovasi",
+          categories: ["Renovasi"],
         },
         {
           userId: "user4",
           username: "FotograferPro",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Foto",
-          image: photographyImage,
+          images: [photographyImage, designImage, craftsImage],
           description:
             "Mencari fotografer untuk event wedding, birthday, atau corporate? Peralatan lengkap & hasil maksimal dijamin! 📸",
-          category: "Fotografi",
+          categories: ["Fotografi", "Videografi"],
         },
         {
           userId: "user5",
           username: "CodeMaster",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Code",
-          image: webdevImage,
+          images: [webdevImage],
           description:
             "Jasa pembuatan website & aplikasi mobile. Teknologi terkini, responsive design, dan maintenance support. Gratis konsultasi!",
-          category: "Pemrograman",
+          categories: ["Pemrograman", "Desain Grafis"],
         },
         {
           userId: "user6",
           username: "CraftLover",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Craft",
-          image: craftsImage,
+          images: [craftsImage, cateringImage],
           description:
             "Kerajinan tangan unik & custom! Cocok untuk hadiah spesial, dekorasi rumah, atau souvenir acara. Bisa request design sendiri! ✨",
-          category: "Kerajinan",
+          categories: ["Kerajinan"],
         },
         {
           userId: "user7",
           username: "ChefCatering",
           avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chef",
-          image: cateringImage,
+          images: [cateringImage],
           description:
             "Catering untuk segala acara! Menu bervariasi, higienis, dan lezat. Paket mulai dari 50 porsi. Pesan sekarang!",
-          category: "Katering",
+          categories: ["Katering"],
         },
       ];
 
