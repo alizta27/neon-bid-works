@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "username": "budi_santoso",
+    "email": "budi@example.com",
+    "password": "password123",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+    "bio": "Desainer grafis berpengalaman 5 tahun. Spesialisasi logo & branding.",
+    "tokens": 150
+  },
+  {
+    "id": "2",
+    "username": "siti_nurhaliza",
+    "email": "siti@example.com",
+    "password": "password123",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Siti",
+    "bio": "Web developer & UI/UX designer. Suka bikin website keren!",
+    "tokens": 200
+  },
+  {
+    "id": "3",
+    "username": "ahmad_rifai",
+    "email": "ahmad@example.com",
+    "password": "password123",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmad",
+    "bio": "Fotografer profesional untuk acara & produk.",
+    "tokens": 100
+  },
+  {
+    "id": "4",
+    "username": "maya_kusuma",
+    "email": "maya@example.com",
+    "password": "password123",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Maya",
+    "bio": "Content writer & copywriter. Membantu bisnis Anda berkembang!",
+    "tokens": 175
+  }
+]

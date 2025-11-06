@@ -6,13 +6,17 @@ import EditProfileSheet from '@/components/EditProfileSheet';
 import BottomNav from '@/components/BottomNav';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { LogOut } from 'lucide-react';
 import { useState } from 'react';
 import CommentSheet from '@/components/CommentSheet';
 import BidSheet from '@/components/BidSheet';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Profile() {
   const [, setLocation] = useLocation();
-  const { currentUser, posts, toggleLike, addComment, addBid, updateCurrentUser } = useStore();
+  const { currentUser, posts, toggleLike, addComment, addBid, updateCurrentUser, logout } = useStore();
+  const { toast } = useToast();
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [showBids, setShowBids] = useState(false);
@@ -65,6 +69,15 @@ export default function Profile() {
     updateCurrentUser(data);
   };
 
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Berhasil keluar",
+      description: "Sampai jumpa lagi!",
+    });
+    setLocation('/auth');
+  };
+
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-background pb-20 flex items-center justify-center">
@@ -77,8 +90,16 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <header className="sticky top-0 z-40 bg-card border-b border-card-border">
-        <div className="max-w-lg mx-auto p-4">
+        <div className="max-w-lg mx-auto p-4 flex items-center justify-between">
           <h1 className="text-xl font-bold" data-testid="text-profile-title">Profil</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleLogout}
+            data-testid="button-logout"
+          >
+            <LogOut className="w-5 h-5" />
+          </Button>
         </div>
       </header>
 

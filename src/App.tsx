@@ -9,6 +9,7 @@ import Upload from "@/pages/Upload";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
 import PostDetail from "@/pages/PostDetail";
+import Auth from "@/pages/Auth";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/profile" component={Profile} />
       <Route path="/post/:id" component={PostDetail} />
+      <Route path="/auth" component={Auth} />
       <Route component={NotFound} />
     </Switch>
   );
