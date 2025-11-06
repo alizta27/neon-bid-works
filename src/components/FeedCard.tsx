@@ -1,4 +1,11 @@
-import { Heart, MessageCircle, Tag, MoreVertical, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  Tag,
+  MoreVertical,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -92,8 +99,10 @@ export default function FeedCard({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
+            <div className="absolute top-[50%] w-full flex justify-between">
+              <CarouselPrevious className="left-2 bg-slate-100" />
+              <CarouselNext className="right-2 bg-slate-100" />
+            </div>
           </Carousel>
         ) : (
           <div
