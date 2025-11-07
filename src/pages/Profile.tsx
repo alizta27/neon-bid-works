@@ -155,7 +155,7 @@ export default function Profile() {
               {likedPosts.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
-                    Belum ada postingan yang disukai
+                    Belum ada postingan yang disimpan
                   </p>
                 </div>
               ) : (
