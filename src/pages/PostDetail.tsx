@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 import { useStore } from "@/lib/store";
 import { ArrowLeft, Heart, MessageCircle, Tag } from "lucide-react";
@@ -10,8 +10,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import CommentSheet from "@/components/CommentSheet";
 import BidSheet from "@/components/BidSheet";
@@ -23,9 +22,23 @@ export default function PostDetail() {
   const { posts, currentUser, toggleLike, addComment, addBid } = useStore();
   const [showComments, setShowComments] = useState(false);
   const [showBids, setShowBids] = useState(false);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
   const postId = (params as { id: string } | null)?.id || "";
   const post = posts.find((p) => p.id === postId);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    setCount(carouselApi.scrollSnapList().length);
+    setCurrent(carouselApi.selectedScrollSnap());
+
+    carouselApi.on("select", () => {
+      setCurrent(carouselApi.selectedScrollSnap());
+    });
+  }, [carouselApi]);
 
   if (!post) {
     return (
@@ -86,24 +99,39 @@ export default function PostDetail() {
       <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="max-w-lg mx-auto">
           {post.images && post.images.length > 1 ? (
-            <Carousel className="w-full">
-              <CarouselContent>
-                {post.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="aspect-square bg-muted">
-                      <img
-                        src={image}
-                        alt={`${post.description} - ${index + 1}`}
-                        className="w-full h-full object-cover"
-                        data-testid={`img-post-detail-${index}`}
-                      />
-                    </div>
-                  </CarouselItem>
+            <div className="relative">
+              <Carousel className="w-full" setApi={setCarouselApi}>
+                <CarouselContent>
+                  {post.images.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="aspect-square bg-muted">
+                        <img
+                          src={image}
+                          alt={`${post.description} - ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          data-testid={`img-post-detail-${index}`}
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+              {/* Dots Indicator */}
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
+                {Array.from({ length: count }).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => carouselApi?.scrollTo(index)}
+                    className={`h-2 rounded-full transition-all ${
+                      index === current 
+                        ? "w-6 bg-primary" 
+                        : "w-2 bg-background/60"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
                 ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
+              </div>
+            </div>
           ) : (
             <div className="aspect-square bg-muted">
               <img

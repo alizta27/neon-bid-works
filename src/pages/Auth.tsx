@@ -81,7 +81,8 @@ export default function Auth() {
       description: `Selamat datang, ${newUser.username}!`,
     });
     
-    setLocation('/');
+    // Redirect to onboarding for new users
+    setLocation('/onboarding');
   };
 
   return (

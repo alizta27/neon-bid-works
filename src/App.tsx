@@ -1,6 +1,4 @@
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/Home";
@@ -10,6 +8,8 @@ import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
 import PostDetail from "@/pages/PostDetail";
 import Auth from "@/pages/Auth";
+import Landing from "@/pages/Landing";
+import Onboarding from "@/pages/Onboarding";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +22,8 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/post/:id" component={PostDetail} />
       <Route path="/auth" component={Auth} />
+      <Route path="/landing" component={Landing} />
+      <Route path="/onboarding" component={Onboarding} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -29,12 +31,10 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Router />
+    </TooltipProvider>
   );
 }
 

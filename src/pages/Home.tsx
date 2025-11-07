@@ -34,7 +34,13 @@ export default function Home() {
     const storedUser = localStorage.getItem("kerjaaja_data");
     const data = storedUser ? JSON.parse(storedUser) : null;
 
-    if (!data?.currentUser || posts.length === 0) {
+    // Redirect to landing if not logged in
+    if (!data?.currentUser) {
+      setLocation('/landing');
+      return;
+    }
+
+    if (posts.length === 0) {
       const mockUser = {
         id: "user1",
         username: "AndyPratama",

@@ -15,8 +15,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import {
   Drawer,
@@ -27,7 +26,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import type { Post } from "@/lib/store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FeedCardProps {
   post: Post;
@@ -48,11 +47,26 @@ export default function FeedCard({
 }: FeedCardProps) {
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+  
   const isLiked = currentUserId ? post.likes.includes(currentUserId) : false;
   const truncatedDesc =
     post.description.length > 100
       ? post.description.substring(0, 100) + "..."
       : post.description;
+
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    setCount(carouselApi.scrollSnapList().length);
+    setCurrent(carouselApi.selectedScrollSnap());
+
+    carouselApi.on("select", () => {
+      setCurrent(carouselApi.selectedScrollSnap());
+    });
+  }, [carouselApi]);
 
   return (
     <Card
@@ -95,28 +109,44 @@ export default function FeedCard({
         </div>
 
         {post.images && post.images.length > 1 ? (
-          <Carousel className="w-full mb-3">
-            <CarouselContent>
-              {post.images.map((image, index) => (
-                <CarouselItem key={index}>
-                  <div
-                    className="aspect-square rounded-lg overflow-hidden bg-muted"
-                    data-testid={`img-post-${post.id}-${index}`}
-                  >
-                    <img
-                      src={image}
-                      alt={`${post.description} - ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CarouselItem>
+          <div className="relative mb-3">
+            <Carousel className="w-full" setApi={setCarouselApi}>
+              <CarouselContent>
+                {post.images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div
+                      className="aspect-square rounded-lg overflow-hidden bg-muted"
+                      data-testid={`img-post-${post.id}-${index}`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${post.description} - ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+            {/* Dots Indicator */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
+              {Array.from({ length: count }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    carouselApi?.scrollTo(index);
+                  }}
+                  className={`h-2 rounded-full transition-all ${
+                    index === current 
+                      ? "w-6 bg-primary" 
+                      : "w-2 bg-background/60"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
               ))}
-            </CarouselContent>
-            <div className="absolute top-[50%] w-full flex justify-between">
-              <CarouselPrevious className="left-2 bg-slate-100" />
-              <CarouselNext className="right-2 bg-slate-100" />
             </div>
-          </Carousel>
+          </div>
         ) : (
           <div
             className="aspect-square rounded-lg overflow-hidden mb-3 bg-muted"
