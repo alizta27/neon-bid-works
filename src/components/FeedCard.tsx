@@ -1,11 +1,4 @@
-import {
-  Heart,
-  MessageCircle,
-  Tag,
-  MoreVertical,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Heart, MessageCircle, MoreVertical } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -130,7 +123,9 @@ export default function FeedCard({
             ))}
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
-            <span data-testid={`text-location-${post.id}`}>📍 {post.location}</span>
+            <span data-testid={`text-location-${post.id}`}>
+              📍 {post.location}
+            </span>
             <span data-testid={`text-budget-${post.id}`}>💰 {post.budget}</span>
           </div>
           <p
@@ -192,17 +187,6 @@ export default function FeedCard({
               data-testid={`button-comment-${post.id}`}
             >
               <MessageCircle className="w-5 h-5 text-muted-foreground" />
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onBid?.();
-              }}
-              className="flex items-center gap-1.5 hover-elevate rounded-md px-2 py-1"
-              data-testid={`button-bid-${post.id}`}
-            >
-              <Tag className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 

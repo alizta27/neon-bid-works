@@ -1,29 +1,37 @@
-import { useLocation } from 'wouter';
-import { useStore } from '@/lib/store';
-import ProfileHeader from '@/components/ProfileHeader';
-import FeedCard from '@/components/FeedCard';
-import EditProfileSheet from '@/components/EditProfileSheet';
-import BottomNav from '@/components/BottomNav';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
-import { useState } from 'react';
-import CommentSheet from '@/components/CommentSheet';
-import BidSheet from '@/components/BidSheet';
-import { useToast } from '@/hooks/use-toast';
+import { useLocation } from "wouter";
+import { useStore } from "@/lib/store";
+import ProfileHeader from "@/components/ProfileHeader";
+import FeedCard from "@/components/FeedCard";
+import EditProfileSheet from "@/components/EditProfileSheet";
+import BottomNav from "@/components/BottomNav";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import CommentSheet from "@/components/CommentSheet";
+import BidSheet from "@/components/BidSheet";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Profile() {
   const [, setLocation] = useLocation();
-  const { currentUser, posts, toggleLike, addComment, addBid, updateCurrentUser, logout } = useStore();
+  const {
+    currentUser,
+    posts,
+    toggleLike,
+    addComment,
+    addBid,
+    updateCurrentUser,
+    logout,
+  } = useStore();
   const { toast } = useToast();
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [showBids, setShowBids] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
 
-  const myPosts = posts.filter(p => p.userId === currentUser?.id);
-  const likedPosts = posts.filter(p => currentUser && p.likes.includes(currentUser.id));
+  const myPosts = posts.filter((p) => p.userId === currentUser?.id);
+  const likedPosts = posts.filter(
+    (p) => currentUser && p.likes.includes(currentUser.id)
+  );
 
   const handleLike = (postId: string) => {
     if (currentUser) {
@@ -63,9 +71,13 @@ export default function Profile() {
     }
   };
 
-  const selectedPostData = posts.find(p => p.id === selectedPost);
+  const selectedPostData = posts.find((p) => p.id === selectedPost);
 
-  const handleSaveProfile = (data: { username: string; bio: string; avatar: string }) => {
+  const handleSaveProfile = (data: {
+    username: string;
+    bio: string;
+    avatar: string;
+  }) => {
     updateCurrentUser(data);
   };
 
@@ -75,7 +87,7 @@ export default function Profile() {
       title: "Berhasil keluar",
       description: "Sampai jumpa lagi!",
     });
-    setLocation('/auth');
+    setLocation("/auth");
   };
 
   if (!currentUser) {
@@ -91,7 +103,9 @@ export default function Profile() {
     <div className="min-h-screen bg-background pb-20">
       <header className="sticky top-0 z-40 bg-card border-b border-card-border">
         <div className="max-w-lg mx-auto p-4">
-          <h1 className="text-xl font-bold" data-testid="text-profile-title">Profil</h1>
+          <h1 className="text-xl font-bold" data-testid="text-profile-title">
+            Profil
+          </h1>
         </div>
       </header>
 
@@ -104,17 +118,8 @@ export default function Profile() {
             tokens={currentUser.tokens}
             postCount={myPosts.length}
             onEditProfile={() => setShowEditProfile(true)}
+            handleLogout={handleLogout}
           />
-
-          <Button
-            variant="destructive"
-            className="w-full"
-            onClick={handleLogout}
-            data-testid="button-logout"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Keluar
-          </Button>
 
           <Tabs defaultValue="posts" className="w-full">
             <TabsList className="w-full grid grid-cols-2">
@@ -122,7 +127,7 @@ export default function Profile() {
                 Postingan Saya
               </TabsTrigger>
               <TabsTrigger value="liked" data-testid="tab-liked-posts">
-                Disukai
+                Disimpan
               </TabsTrigger>
             </TabsList>
 
@@ -149,7 +154,9 @@ export default function Profile() {
             <TabsContent value="liked" className="space-y-4 mt-4">
               {likedPosts.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-muted-foreground">Belum ada postingan yang disukai</p>
+                  <p className="text-muted-foreground">
+                    Belum ada postingan yang disukai
+                  </p>
                 </div>
               ) : (
                 likedPosts.map((post) => (
