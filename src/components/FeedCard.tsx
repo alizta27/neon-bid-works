@@ -1,4 +1,12 @@
-import { Heart, MessageCircle, MoreVertical, Eye, Bookmark, Share2, Flag } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  MoreVertical,
+  Eye,
+  Bookmark,
+  Share2,
+  Flag,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +22,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
@@ -48,7 +57,6 @@ export default function FeedCard({
   return (
     <Card
       className="overflow-hidden hover-elevate cursor-pointer rounded-none shadow-none"
-      onClick={onClick}
       data-testid={`card-post-${post.id}`}
     >
       <div className="p-4 pb-3">
@@ -221,7 +229,7 @@ export default function FeedCard({
           <DrawerHeader>
             <DrawerTitle>Opsi</DrawerTitle>
           </DrawerHeader>
-          <div className="px-4 pb-6">
+          <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
             <div className="space-y-2">
               <Button
                 variant="ghost"
@@ -260,6 +268,11 @@ export default function FeedCard({
               </Button>
             </div>
           </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">Tutup</Button>
+            </DrawerClose>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </Card>
