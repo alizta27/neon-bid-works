@@ -10,6 +10,7 @@ export default function ProfileHeaderExample() {
         tokens={12500}
         postCount={24}
         onEditProfile={() => console.log('Edit profile clicked')}
+        handleLogout={() => console.log('Logout clicked')}
       />
     </div>
   );
