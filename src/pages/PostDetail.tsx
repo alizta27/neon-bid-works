@@ -24,7 +24,8 @@ export default function PostDetail() {
   const [showComments, setShowComments] = useState(false);
   const [showBids, setShowBids] = useState(false);
 
-  const post = posts.find((p) => p.id === params?.id);
+  const postId = (params as { id: string } | null)?.id || "";
+  const post = posts.find((p) => p.id === postId);
 
   if (!post) {
     return (

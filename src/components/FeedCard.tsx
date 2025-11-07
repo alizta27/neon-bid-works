@@ -129,6 +129,10 @@ export default function FeedCard({
               </Badge>
             ))}
           </div>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
+            <span data-testid={`text-location-${post.id}`}>📍 {post.location}</span>
+            <span data-testid={`text-budget-${post.id}`}>💰 {post.budget}</span>
+          </div>
           <p
             className="text-sm leading-relaxed"
             data-testid={`text-description-${post.id}`}

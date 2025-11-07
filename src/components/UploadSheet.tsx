@@ -12,6 +12,9 @@ interface UploadSheetProps {
     image: string;
     description: string;
     category: string;
+    location: string;
+    budget: string;
+    type: 'cari-jasa' | 'tawarkan-jasa';
   }) => void;
 }
 
@@ -36,6 +39,10 @@ export default function UploadSheet({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [customCategory, setCustomCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [budget, setBudget] = useState("");
+  const [type, setType] = useState<'cari-jasa' | 'tawarkan-jasa'>('cari-jasa');
 
   if (!isOpen) return null;
 
@@ -64,15 +71,26 @@ export default function UploadSheet({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (imagePreviews.length > 0 && description.trim() && selectedCategories.length > 0) {
+    if (imagePreviews.length > 0 && description.trim() && selectedCategories.length > 0 && location.trim() && budget.trim()) {
+      const finalCategories = selectedCategories.includes('Lainnya') && customCategory.trim()
+        ? [...selectedCategories.filter(c => c !== 'Lainnya'), customCategory.trim()]
+        : selectedCategories;
+      
       onSubmit({
         image: imagePreviews[0],
         description: description.trim(),
-        category: selectedCategories[0],
+        category: finalCategories[0],
+        location: location.trim(),
+        budget: budget.trim(),
+        type,
       });
       setImagePreviews([]);
       setDescription("");
       setSelectedCategories([]);
+      setCustomCategory("");
+      setLocation("");
+      setBudget("");
+      setType('cari-jasa');
       onClose();
     }
   };
@@ -162,6 +180,20 @@ export default function UploadSheet({
           </div>
 
           <div>
+            <Label htmlFor="type">Jenis</Label>
+            <select
+              id="type"
+              value={type}
+              onChange={(e) => setType(e.target.value as 'cari-jasa' | 'tawarkan-jasa')}
+              className="w-full mt-2 px-3 py-2 border border-input rounded-md bg-background text-sm"
+              data-testid="select-type"
+            >
+              <option value="cari-jasa">Cari Jasa</option>
+              <option value="tawarkan-jasa">Tawarkan Jasa</option>
+            </select>
+          </div>
+
+          <div>
             <Label>Kategori (Pilih satu atau lebih)</Label>
             <div className="mt-2 flex flex-wrap gap-2" data-testid="category-selection">
               {categories.map((cat) => (
@@ -178,6 +210,39 @@ export default function UploadSheet({
                 </Button>
               ))}
             </div>
+            {selectedCategories.includes('Lainnya') && (
+              <Input
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                placeholder="Masukkan kategori kustom"
+                className="mt-2"
+                data-testid="input-custom-category"
+              />
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="location">Lokasi</Label>
+            <Input
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Masukkan lokasi"
+              className="mt-2"
+              data-testid="input-location"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="budget">Budget</Label>
+            <Input
+              id="budget"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              placeholder="Masukkan budget (contoh: Rp 500.000 - Rp 1.000.000)"
+              className="mt-2"
+              data-testid="input-budget"
+            />
           </div>
 
           <div>
@@ -196,7 +261,14 @@ export default function UploadSheet({
           <Button
             type="submit"
             className="w-full"
-            disabled={imagePreviews.length === 0 || !description.trim() || selectedCategories.length === 0}
+            disabled={
+              imagePreviews.length === 0 || 
+              !description.trim() || 
+              selectedCategories.length === 0 || 
+              !location.trim() || 
+              !budget.trim() ||
+              (selectedCategories.includes('Lainnya') && !customCategory.trim())
+            }
             data-testid="button-submit-post"
           >
             <Upload className="w-4 h-4 mr-2" />

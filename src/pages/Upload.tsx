@@ -14,7 +14,7 @@ export default function Upload() {
     }
   }, [currentUser, setLocation]);
 
-  const handleSubmit = (data: { image: string; description: string; category: string }) => {
+  const handleSubmit = (data: { image: string; description: string; category: string; location: string; budget: string; type: 'cari-jasa' | 'tawarkan-jasa' }) => {
     if (currentUser) {
       addPost({
         userId: currentUser.id,
@@ -23,6 +23,9 @@ export default function Upload() {
         images: [data.image],
         description: data.description,
         categories: [data.category],
+        location: data.location,
+        budget: data.budget,
+        type: data.type,
       });
       setLocation('/');
     }

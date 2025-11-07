@@ -16,6 +16,9 @@ export interface Post {
   images: string[];
   description: string;
   categories: string[];
+  location: string;
+  budget: string;
+  type: 'cari-jasa' | 'tawarkan-jasa';
   likes: string[];
   comments: Comment[];
   bids: Bid[];
