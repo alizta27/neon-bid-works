@@ -44,7 +44,7 @@ export default function Home() {
 
     // Redirect to landing if not logged in
     if (!data?.currentUser) {
-      setLocation('/landing');
+      setLocation("/landing");
       return;
     }
 
@@ -137,30 +137,32 @@ export default function Home() {
       // Add mock notifications
       const mockNotifications = [
         {
-          type: 'bid' as const,
-          title: 'Penawaran Baru',
-          message: 'BudiGraphics mengajukan penawaran Rp 500.000 untuk proyek desain Anda',
-          postId: 'post1',
+          type: "bid" as const,
+          title: "Penawaran Baru",
+          message:
+            "BudiGraphics mengajukan penawaran Rp 500.000 untuk proyek desain Anda",
+          postId: "post1",
           read: false,
         },
         {
-          type: 'comment' as const,
-          title: 'Komentar Baru',
+          type: "comment" as const,
+          title: "Komentar Baru",
           message: 'Siti berkomentar di postingan Anda: "Wah keren banget!"',
-          postId: 'post1',
+          postId: "post1",
           read: false,
         },
         {
-          type: 'like' as const,
-          title: 'Seseorang menyukai postingan Anda',
-          message: 'Ahmad menyukai postingan Anda',
-          postId: 'post2',
+          type: "like" as const,
+          title: "Seseorang menyukai postingan Anda",
+          message: "Ahmad menyukai postingan Anda",
+          postId: "post2",
           read: true,
         },
         {
-          type: 'system' as const,
-          title: 'Selamat Datang!',
-          message: 'Terima kasih telah bergabung dengan KerjaAja. Mulai posting pekerjaan Anda!',
+          type: "system" as const,
+          title: "Selamat Datang!",
+          message:
+            "Terima kasih telah bergabung dengan KerjaAja. Mulai posting pekerjaan Anda!",
           read: true,
         },
       ];
@@ -169,12 +171,14 @@ export default function Home() {
         const newNotif = {
           id: Date.now().toString() + Math.random(),
           ...notif,
-          createdAt: new Date(Date.now() - Math.random() * 86400000 * 2).toISOString(),
+          createdAt: new Date(
+            Date.now() - Math.random() * 86400000 * 2
+          ).toISOString(),
         };
-        const data = localStorage.getItem('kerjaaja_data');
+        const data = localStorage.getItem("kerjaaja_data");
         const parsed = data ? JSON.parse(data) : {};
         parsed.notifications = [...(parsed.notifications || []), newNotif];
-        localStorage.setItem('kerjaaja_data', JSON.stringify(parsed));
+        localStorage.setItem("kerjaaja_data", JSON.stringify(parsed));
       });
 
       useStore.getState().initializeFromLocalStorage();
@@ -318,7 +322,10 @@ export default function Home() {
 
   const selectedPostData = posts.find((p) => p.id === selectedPost);
   const unreadNotifications = notifications.filter((n) => !n.read).length;
-  const unreadChats = conversations.reduce((total, conv) => total + conv.unreadCount, 0);
+  const unreadChats = conversations.reduce(
+    (total, conv) => total + conv.unreadCount,
+    0
+  );
 
   const handleNotificationClick = (notification: any) => {
     if (notification.postId) {
@@ -342,16 +349,14 @@ export default function Home() {
               variant="ghost"
               size="icon"
               className="relative"
-              onClick={() => setLocation('/chat')}
+              onClick={() => setLocation("/chat")}
             >
               <MessageCircle className="w-5 h-5" />
               {unreadChats > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
-                >
-                  {unreadChats > 9 ? '9+' : unreadChats}
-                </Badge>
+                  className="absolute -top-3 -left-3 -right-1 p-1 flex items-center justify-center text-xs rounded-[100%]"
+                />
               )}
             </Button>
             <Button
@@ -364,10 +369,8 @@ export default function Home() {
               {unreadNotifications > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
-                >
-                  {unreadNotifications > 9 ? '9+' : unreadNotifications}
-                </Badge>
+                  className="absolute -top-3 -left-3 -right-1 p-1 flex items-center justify-center text-xs rounded-[100%]"
+                />
               )}
             </Button>
           </div>
