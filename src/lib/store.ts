@@ -43,9 +43,43 @@ export interface Bid {
   createdAt: string;
 }
 
+export interface Notification {
+  id: string;
+  type: 'like' | 'comment' | 'bid' | 'system';
+  title: string;
+  message: string;
+  postId?: string;
+  read: boolean;
+  createdAt: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  text: string;
+  createdAt: string;
+}
+
+export interface Conversation {
+  id: string;
+  postId: string;
+  postTitle: string;
+  participants: string[];
+  participantNames: string[];
+  participantAvatars: string[];
+  messages: ChatMessage[];
+  lastMessage?: string;
+  lastMessageTime?: string;
+  unreadCount: number;
+}
+
 interface AppState {
   currentUser: User | null;
   posts: Post[];
+  notifications: Notification[];
+  conversations: Conversation[];
   searchQuery: string;
   selectedCategory: string;
   setCurrentUser: (user: User) => void;
@@ -55,6 +89,10 @@ interface AppState {
   toggleLike: (postId: string, userId: string) => void;
   addComment: (postId: string, comment: Omit<Comment, 'id' | 'createdAt'>) => void;
   addBid: (postId: string, bid: Omit<Bid, 'id' | 'createdAt'>) => void;
+  markNotificationAsRead: (notificationId: string) => void;
+  markAllNotificationsAsRead: () => void;
+  addMessage: (conversationId: string, message: Omit<ChatMessage, 'id' | 'createdAt'>) => void;
+  createConversation: (postId: string, postTitle: string, participantId: string, participantName: string, participantAvatar: string) => string;
   setSearchQuery: (query: string) => void;
   setSelectedCategory: (category: string) => void;
   initializeFromLocalStorage: () => void;
@@ -74,6 +112,8 @@ const saveToLocalStorage = (data: any) => {
 export const useStore = create<AppState>((set, get) => ({
   currentUser: null,
   posts: [],
+  notifications: [],
+  conversations: [],
   searchQuery: '',
   selectedCategory: 'Semua',
   
@@ -179,6 +219,87 @@ export const useStore = create<AppState>((set, get) => ({
     saveToLocalStorage(data);
   },
   
+  markNotificationAsRead: (notificationId) => {
+    set((state) => ({
+      notifications: state.notifications.map((notif) =>
+        notif.id === notificationId ? { ...notif, read: true } : notif
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.notifications = get().notifications;
+    saveToLocalStorage(data);
+  },
+  
+  markAllNotificationsAsRead: () => {
+    set((state) => ({
+      notifications: state.notifications.map((notif) => ({ ...notif, read: true })),
+    }));
+    
+    const data = getStoredData() || {};
+    data.notifications = get().notifications;
+    saveToLocalStorage(data);
+  },
+  
+  addMessage: (conversationId, message) => {
+    const newMessage: ChatMessage = {
+      ...message,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+    };
+    
+    set((state) => ({
+      conversations: state.conversations.map((conv) => {
+        if (conv.id === conversationId) {
+          return {
+            ...conv,
+            messages: [...conv.messages, newMessage],
+            lastMessage: message.text,
+            lastMessageTime: newMessage.createdAt,
+            unreadCount: message.senderId !== state.currentUser?.id ? conv.unreadCount + 1 : conv.unreadCount,
+          };
+        }
+        return conv;
+      }),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
+  },
+  
+  createConversation: (postId, postTitle, participantId, participantName, participantAvatar) => {
+    const currentUser = get().currentUser;
+    if (!currentUser) return '';
+    
+    const existingConv = get().conversations.find(
+      (conv) => conv.postId === postId && conv.participants.includes(participantId)
+    );
+    
+    if (existingConv) return existingConv.id;
+    
+    const newConversation: Conversation = {
+      id: Date.now().toString(),
+      postId,
+      postTitle,
+      participants: [currentUser.id, participantId],
+      participantNames: [currentUser.username, participantName],
+      participantAvatars: [currentUser.avatar, participantAvatar],
+      messages: [],
+      unreadCount: 0,
+    };
+    
+    set((state) => ({
+      conversations: [newConversation, ...state.conversations],
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = [newConversation, ...(data.conversations || [])];
+    saveToLocalStorage(data);
+    
+    return newConversation.id;
+  },
+  
   setSearchQuery: (query) => set({ searchQuery: query }),
   
   setSelectedCategory: (category) => set({ selectedCategory: category }),
@@ -189,6 +310,8 @@ export const useStore = create<AppState>((set, get) => ({
       set({
         currentUser: data.currentUser || null,
         posts: data.posts || [],
+        notifications: data.notifications || [],
+        conversations: data.conversations || [],
       });
     }
   },

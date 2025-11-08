@@ -6,7 +6,10 @@ import CommentSheet from "@/components/CommentSheet";
 import BidSheet from "@/components/BidSheet";
 import BottomNav from "@/components/BottomNav";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import NotificationSheet from "@/components/NotificationSheet";
+import { Sparkles, Bell } from "lucide-react";
 import designImage from "@/assets/generated_images/Graphic_design_work_showcase_465d6773.png";
 import renovationImage from "@/assets/generated_images/Home_renovation_project_afc21a20.png";
 import photographyImage from "@/assets/generated_images/Photography_services_showcase_f5a76139.png";
@@ -19,14 +22,18 @@ export default function Home() {
   const {
     posts,
     currentUser,
+    notifications,
     toggleLike,
     addComment,
     addBid,
+    markNotificationAsRead,
+    markAllNotificationsAsRead,
     initializeFromLocalStorage,
   } = useStore();
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [showBids, setShowBids] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     initializeFromLocalStorage();
@@ -125,6 +132,51 @@ export default function Home() {
           type: "tawarkan-jasa" as const,
         },
       ];
+
+      // Add mock notifications
+      const mockNotifications = [
+        {
+          type: 'bid' as const,
+          title: 'Penawaran Baru',
+          message: 'BudiGraphics mengajukan penawaran Rp 500.000 untuk proyek desain Anda',
+          postId: 'post1',
+          read: false,
+        },
+        {
+          type: 'comment' as const,
+          title: 'Komentar Baru',
+          message: 'Siti berkomentar di postingan Anda: "Wah keren banget!"',
+          postId: 'post1',
+          read: false,
+        },
+        {
+          type: 'like' as const,
+          title: 'Seseorang menyukai postingan Anda',
+          message: 'Ahmad menyukai postingan Anda',
+          postId: 'post2',
+          read: true,
+        },
+        {
+          type: 'system' as const,
+          title: 'Selamat Datang!',
+          message: 'Terima kasih telah bergabung dengan KerjaAja. Mulai posting pekerjaan Anda!',
+          read: true,
+        },
+      ];
+
+      mockNotifications.forEach((notif) => {
+        const newNotif = {
+          id: Date.now().toString() + Math.random(),
+          ...notif,
+          createdAt: new Date(Date.now() - Math.random() * 86400000 * 2).toISOString(),
+        };
+        const data = localStorage.getItem('kerjaaja_data');
+        const parsed = data ? JSON.parse(data) : {};
+        parsed.notifications = [...(parsed.notifications || []), newNotif];
+        localStorage.setItem('kerjaaja_data', JSON.stringify(parsed));
+      });
+
+      useStore.getState().initializeFromLocalStorage();
 
       mockPosts.forEach((post, index) => {
         const newPost = useStore.getState().addPost(post);
@@ -264,6 +316,14 @@ export default function Home() {
   };
 
   const selectedPostData = posts.find((p) => p.id === selectedPost);
+  const unreadNotifications = notifications.filter((n) => !n.read).length;
+
+  const handleNotificationClick = (notification: any) => {
+    if (notification.postId) {
+      setLocation(`/post/${notification.postId}`);
+    }
+    setShowNotifications(false);
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -275,6 +335,22 @@ export default function Home() {
               KerjaAja
             </h1>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={() => setShowNotifications(true)}
+          >
+            <Bell className="w-5 h-5" />
+            {unreadNotifications > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+              >
+                {unreadNotifications > 9 ? '9+' : unreadNotifications}
+              </Badge>
+            )}
+          </Button>
         </div>
       </header>
 
@@ -322,6 +398,15 @@ export default function Home() {
           />
         </>
       )}
+
+      <NotificationSheet
+        notifications={notifications}
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        onMarkAsRead={markNotificationAsRead}
+        onMarkAllAsRead={markAllNotificationsAsRead}
+        onNotificationClick={handleNotificationClick}
+      />
 
       <BottomNav />
     </div>

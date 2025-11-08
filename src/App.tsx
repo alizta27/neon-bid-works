@@ -7,6 +7,8 @@ import Upload from "@/pages/Upload";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
 import PostDetail from "@/pages/PostDetail";
+import Chat from "@/pages/Chat";
+import ChatDetail from "@/pages/ChatDetail";
 import Auth from "@/pages/Auth";
 import Landing from "@/pages/Landing";
 import Onboarding from "@/pages/Onboarding";
@@ -21,6 +23,8 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/profile" component={Profile} />
       <Route path="/post/:id" component={PostDetail} />
+      <Route path="/chat" component={Chat} />
+      <Route path="/chat/:id" component={ChatDetail} />
       <Route path="/auth" component={Auth} />
       <Route path="/landing" component={Landing} />
       <Route path="/onboarding" component={Onboarding} />
