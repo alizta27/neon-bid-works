@@ -1,7 +1,6 @@
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -47,8 +46,8 @@ export default function NotificationSheet({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="top" className="h-[80vh]">
-        <SheetHeader>
+      <SheetContent side="top" className="h-screen flex flex-col p-0">
+        <div className="p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <SheetTitle>Notifikasi</SheetTitle>
             {unreadCount > 0 && (
@@ -63,16 +62,16 @@ export default function NotificationSheet({
               </Button>
             )}
           </div>
-        </SheetHeader>
+        </div>
 
-        <ScrollArea className="h-full mt-4">
+        <ScrollArea className="flex-1 px-6">
           {notifications.length === 0 ? (
             <div className="text-center py-12">
               <Bell className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">Belum ada notifikasi</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 py-4">
               {notifications.map((notification) => (
                 <div
                   key={notification.id}

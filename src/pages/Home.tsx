@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import NotificationSheet from "@/components/NotificationSheet";
-import { Sparkles, Bell } from "lucide-react";
+import { Sparkles, Bell, MessageCircle } from "lucide-react";
 import designImage from "@/assets/generated_images/Graphic_design_work_showcase_465d6773.png";
 import renovationImage from "@/assets/generated_images/Home_renovation_project_afc21a20.png";
 import photographyImage from "@/assets/generated_images/Photography_services_showcase_f5a76139.png";
@@ -23,6 +23,7 @@ export default function Home() {
     posts,
     currentUser,
     notifications,
+    conversations,
     toggleLike,
     addComment,
     addBid,
@@ -317,6 +318,7 @@ export default function Home() {
 
   const selectedPostData = posts.find((p) => p.id === selectedPost);
   const unreadNotifications = notifications.filter((n) => !n.read).length;
+  const unreadChats = conversations.reduce((total, conv) => total + conv.unreadCount, 0);
 
   const handleNotificationClick = (notification: any) => {
     if (notification.postId) {
@@ -335,22 +337,40 @@ export default function Home() {
               KerjaAja
             </h1>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative"
-            onClick={() => setShowNotifications(true)}
-          >
-            <Bell className="w-5 h-5" />
-            {unreadNotifications > 0 && (
-              <Badge
-                variant="destructive"
-                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
-              >
-                {unreadNotifications > 9 ? '9+' : unreadNotifications}
-              </Badge>
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative"
+              onClick={() => setLocation('/chat')}
+            >
+              <MessageCircle className="w-5 h-5" />
+              {unreadChats > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                >
+                  {unreadChats > 9 ? '9+' : unreadChats}
+                </Badge>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative"
+              onClick={() => setShowNotifications(true)}
+            >
+              <Bell className="w-5 h-5" />
+              {unreadNotifications > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                >
+                  {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                </Badge>
+              )}
+            </Button>
+          </div>
         </div>
       </header>
 

@@ -1,19 +1,14 @@
-import { Home, Search, PlusCircle, MessageCircle, User } from 'lucide-react';
+import { Home, Search, PlusCircle, LayoutDashboard, User } from 'lucide-react';
 import { useLocation } from 'wouter';
-import { useStore } from '@/lib/store';
-import { Badge } from '@/components/ui/badge';
 
 export default function BottomNav() {
   const [location, setLocation] = useLocation();
-  const { conversations, currentUser } = useStore();
-
-  const unreadCount = conversations.reduce((total, conv) => total + conv.unreadCount, 0);
 
   const navItems = [
     { icon: Home, label: 'Beranda', path: '/', testId: 'nav-home' },
     { icon: Search, label: 'Cari', path: '/search', testId: 'nav-search' },
     { icon: PlusCircle, label: 'Unggah', path: '/upload', testId: 'nav-upload' },
-    { icon: MessageCircle, label: 'Chat', path: '/chat', testId: 'nav-chat', badge: unreadCount },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', testId: 'nav-dashboard' },
     { icon: User, label: 'Profil', path: '/profile', testId: 'nav-profile' },
   ];
 
@@ -29,23 +24,13 @@ export default function BottomNav() {
               key={item.path}
               onClick={() => setLocation(item.path)}
               data-testid={item.testId}
-              className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all ${
+              className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all ${
                 isActive
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover-elevate'
               }`}
             >
-              <div className="relative">
-                <Icon className={`w-5 h-5 ${isActive ? 'scale-110' : ''}`} />
-                {item.badge && item.badge > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-2 -right-2 h-4 w-4 p-0 flex items-center justify-center text-[10px]"
-                  >
-                    {item.badge > 9 ? '9+' : item.badge}
-                  </Badge>
-                )}
-              </div>
+              <Icon className={`w-5 h-5 ${isActive ? 'scale-110' : ''}`} />
               <span className="text-xs font-medium">{item.label}</span>
             </button>
           );
