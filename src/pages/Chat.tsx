@@ -76,11 +76,33 @@ export default function Chat() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <h3 className="font-semibold truncate">{otherUserName}</h3>
-                          {conversation.unreadCount > 0 && (
-                            <Badge variant="default" className="text-xs">
-                              {conversation.unreadCount}
+                          <div className="flex items-center gap-2">
+                            {conversation.unreadCount > 0 && (
+                              <Badge variant="default" className="text-xs">
+                                {conversation.unreadCount}
+                              </Badge>
+                            )}
+                            <Badge 
+                              variant={
+                                conversation.status === "negotiating" ? "secondary" :
+                                conversation.status === "proposal_sent" ? "default" :
+                                conversation.status === "proposal_rejected" ? "destructive" :
+                                conversation.status === "deal_agreed" ? "default" :
+                                conversation.status === "work_in_progress" ? "default" :
+                                conversation.status === "completed" ? "secondary" :
+                                "outline"
+                              }
+                              className="text-xs whitespace-nowrap"
+                            >
+                              {conversation.status === "negotiating" ? "Negosiasi" :
+                               conversation.status === "proposal_sent" ? "Menunggu" :
+                               conversation.status === "proposal_rejected" ? "Ditolak" :
+                               conversation.status === "deal_agreed" ? "Sepakat" :
+                               conversation.status === "work_in_progress" ? "Berlangsung" :
+                               conversation.status === "completed" ? "Selesai" :
+                               "Ditutup"}
                             </Badge>
-                          )}
+                          </div>
                         </div>
                         <p className="text-xs text-muted-foreground mb-1 truncate">
                           {conversation.postTitle}

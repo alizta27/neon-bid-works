@@ -62,6 +62,33 @@ export interface ChatMessage {
   createdAt: string;
 }
 
+export type ConversationStatus = 
+  | "negotiating" 
+  | "proposal_sent" 
+  | "proposal_rejected" 
+  | "deal_agreed" 
+  | "work_in_progress" 
+  | "completed" 
+  | "closed";
+
+export interface Proposal {
+  id: string;
+  conversationId: string;
+  proposedBy: string;
+  amount: number;
+  message?: string;
+  createdAt: string;
+}
+
+export interface Contract {
+  id: string;
+  conversationId: string;
+  finalAmount: number;
+  agreedAt: string;
+  jobMakerId: string;
+  jobSeekerId: string;
+}
+
 export interface Conversation {
   id: string;
   postId: string;
@@ -73,6 +100,9 @@ export interface Conversation {
   lastMessage?: string;
   lastMessageTime?: string;
   unreadCount: number;
+  status: ConversationStatus;
+  currentProposal?: Proposal;
+  contract?: Contract;
 }
 
 interface AppState {
@@ -93,6 +123,11 @@ interface AppState {
   markAllNotificationsAsRead: () => void;
   addMessage: (conversationId: string, message: Omit<ChatMessage, 'id' | 'createdAt'>) => void;
   createConversation: (postId: string, postTitle: string, participantId: string, participantName: string, participantAvatar: string) => string;
+  updateConversationStatus: (conversationId: string, status: ConversationStatus) => void;
+  sendProposal: (conversationId: string, amount: number, message?: string) => void;
+  approveProposal: (conversationId: string) => void;
+  rejectProposal: (conversationId: string) => void;
+  createContract: (conversationId: string, finalAmount: number) => void;
   setSearchQuery: (query: string) => void;
   setSelectedCategory: (category: string) => void;
   initializeFromLocalStorage: () => void;
@@ -287,6 +322,7 @@ export const useStore = create<AppState>((set, get) => ({
       participantAvatars: [currentUser.avatar, participantAvatar],
       messages: [],
       unreadCount: 0,
+      status: "negotiating",
     };
     
     set((state) => ({
@@ -298,6 +334,98 @@ export const useStore = create<AppState>((set, get) => ({
     saveToLocalStorage(data);
     
     return newConversation.id;
+  },
+
+  updateConversationStatus: (conversationId, status) => {
+    set((state) => ({
+      conversations: state.conversations.map((conv) =>
+        conv.id === conversationId ? { ...conv, status } : conv
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
+  },
+
+  sendProposal: (conversationId, amount, message) => {
+    const currentUser = get().currentUser;
+    if (!currentUser) return;
+
+    const proposal: Proposal = {
+      id: `proposal_${Date.now()}`,
+      conversationId,
+      proposedBy: currentUser.id,
+      amount,
+      message,
+      createdAt: new Date().toISOString(),
+    };
+
+    set((state) => ({
+      conversations: state.conversations.map((conv) =>
+        conv.id === conversationId
+          ? { ...conv, currentProposal: proposal, status: "proposal_sent" as ConversationStatus }
+          : conv
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
+  },
+
+  approveProposal: (conversationId) => {
+    set((state) => ({
+      conversations: state.conversations.map((conv) =>
+        conv.id === conversationId
+          ? { ...conv, status: "deal_agreed" as ConversationStatus }
+          : conv
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
+  },
+
+  rejectProposal: (conversationId) => {
+    set((state) => ({
+      conversations: state.conversations.map((conv) =>
+        conv.id === conversationId
+          ? { ...conv, status: "proposal_rejected" as ConversationStatus, currentProposal: undefined }
+          : conv
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
+  },
+
+  createContract: (conversationId, finalAmount) => {
+    const conversation = get().conversations.find((c) => c.id === conversationId);
+    if (!conversation) return;
+
+    const contract: Contract = {
+      id: `contract_${Date.now()}`,
+      conversationId,
+      finalAmount,
+      agreedAt: new Date().toISOString(),
+      jobMakerId: conversation.participants[0],
+      jobSeekerId: conversation.participants[1],
+    };
+
+    set((state) => ({
+      conversations: state.conversations.map((conv) =>
+        conv.id === conversationId
+          ? { ...conv, contract, status: "work_in_progress" as ConversationStatus }
+          : conv
+      ),
+    }));
+    
+    const data = getStoredData() || {};
+    data.conversations = get().conversations;
+    saveToLocalStorage(data);
   },
   
   setSearchQuery: (query) => set({ searchQuery: query }),
