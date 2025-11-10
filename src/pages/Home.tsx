@@ -181,6 +181,186 @@ export default function Home() {
         localStorage.setItem("kerjaaja_data", JSON.stringify(parsed));
       });
 
+      // Add mock conversations with bidding messages
+      const data = localStorage.getItem("kerjaaja_data");
+      const parsed = data ? JSON.parse(data) : {};
+      
+      if (!parsed.conversations || parsed.conversations.length === 0) {
+        const mockConversations = [
+          {
+            id: "conv1",
+            postId: "post1",
+            postTitle: "Butuh Desain Logo untuk Brand Kopi",
+            participants: ["user1", "user2"],
+            participantNames: ["Anda", "BudiGraphics"],
+            participantAvatars: [
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi"
+            ],
+            messages: [
+              {
+                id: "msg1",
+                senderId: "user2",
+                senderName: "BudiGraphics",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+                text: "Halo, saya tertarik dengan proyek desain logo Anda. Bisa saya lihat referensi yang Anda inginkan?",
+                createdAt: new Date(Date.now() - 7200000).toISOString(),
+              },
+              {
+                id: "msg2",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Halo! Saya ingin logo yang modern dan minimalis, dengan tema kopi. Budget saya sekitar Rp 500.000",
+                createdAt: new Date(Date.now() - 7000000).toISOString(),
+              },
+              {
+                id: "msg3",
+                senderId: "user2",
+                senderName: "BudiGraphics",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+                text: "Saya bisa kerjakan dengan 3 konsep desain berbeda. Untuk Rp 750.000, termasuk revisi unlimited sampai Anda puas.",
+                createdAt: new Date(Date.now() - 6800000).toISOString(),
+              },
+              {
+                id: "msg4",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Wah agak di atas budget saya. Bagaimana kalau Rp 600.000 dengan 2 konsep desain?",
+                createdAt: new Date(Date.now() - 6600000).toISOString(),
+              },
+              {
+                id: "msg5",
+                senderId: "user2",
+                senderName: "BudiGraphics",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+                text: "Deal! Rp 600.000 untuk 2 konsep + 3x revisi. Saya akan selesaikan dalam 5 hari kerja. File dalam format PNG, JPG, dan AI.",
+                createdAt: new Date(Date.now() - 6400000).toISOString(),
+              },
+            ],
+            lastMessage: "Deal! Rp 600.000 untuk 2 konsep + 3x revisi. Saya akan selesaikan dalam 5 hari kerja. File dalam format PNG, JPG, dan AI.",
+            lastMessageTime: new Date(Date.now() - 6400000).toISOString(),
+            unreadCount: 1,
+          },
+          {
+            id: "conv2",
+            postId: "post2",
+            postTitle: "Jasa Fotografi Pre-Wedding",
+            participants: ["user1", "user3"],
+            participantNames: ["Anda", "RinaPhotography"],
+            participantAvatars: [
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=Rina"
+            ],
+            messages: [
+              {
+                id: "msg6",
+                senderId: "user3",
+                senderName: "RinaPhotography",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rina",
+                text: "Hai! Saya lihat Anda menawarkan jasa fotografi pre-wedding. Kapan Anda available untuk bulan depan?",
+                createdAt: new Date(Date.now() - 3600000).toISOString(),
+              },
+              {
+                id: "msg7",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Halo! Saya available di weekend. Untuk paket indoor + outdoor 4 jam, harganya Rp 2.500.000 sudah termasuk edited photos.",
+                createdAt: new Date(Date.now() - 3400000).toISOString(),
+              },
+              {
+                id: "msg8",
+                senderId: "user3",
+                senderName: "RinaPhotography",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rina",
+                text: "Berapa foto yang akan kami dapatkan? Dan apakah bisa tambah 1 lokasi lagi?",
+                createdAt: new Date(Date.now() - 3200000).toISOString(),
+              },
+              {
+                id: "msg9",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Akan dapat 100+ edited photos. Untuk tambah lokasi +Rp 500.000, jadi total Rp 3.000.000",
+                createdAt: new Date(Date.now() - 3000000).toISOString(),
+              },
+            ],
+            lastMessage: "Akan dapat 100+ edited photos. Untuk tambah lokasi +Rp 500.000, jadi total Rp 3.000.000",
+            lastMessageTime: new Date(Date.now() - 3000000).toISOString(),
+            unreadCount: 0,
+          },
+          {
+            id: "conv3",
+            postId: "post3",
+            postTitle: "Renovasi Rumah (Kamar Tidur)",
+            participants: ["user1", "user4"],
+            participantNames: ["Anda", "TokoMaterial88"],
+            participantAvatars: [
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+              "https://api.dicebear.com/7.x/avataaars/svg?seed=Material"
+            ],
+            messages: [
+              {
+                id: "msg10",
+                senderId: "user4",
+                senderName: "TokoMaterial88",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Material",
+                text: "Pak, untuk renovasi kamar tidur ukuran berapa? Kami bisa survey lokasi gratis dulu.",
+                createdAt: new Date(Date.now() - 1800000).toISOString(),
+              },
+              {
+                id: "msg11",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Ukuran 4x3 meter. Mau ganti keramik, cat ulang, dan buat lemari built-in. Estimasi berapa ya?",
+                createdAt: new Date(Date.now() - 1600000).toISOString(),
+              },
+              {
+                id: "msg12",
+                senderId: "user4",
+                senderName: "TokoMaterial88",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Material",
+                text: "Estimasi kasar sekitar Rp 15-18 juta. Sudah termasuk material dan tukang. Lemari built-in pakai HPL atau kayu solid?",
+                createdAt: new Date(Date.now() - 1400000).toISOString(),
+              },
+              {
+                id: "msg13",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "HPL aja. Bisa kurang harganya? Budget saya maksimal 15 juta",
+                createdAt: new Date(Date.now() - 1200000).toISOString(),
+              },
+              {
+                id: "msg14",
+                senderId: "user4",
+                senderName: "TokoMaterial88",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Material",
+                text: "Oke, kami usahakan pas Rp 15 juta. Tapi perlu survey dulu ya untuk memastikan. Kapan bisa kami datang?",
+                createdAt: new Date(Date.now() - 1000000).toISOString(),
+              },
+              {
+                id: "msg15",
+                senderId: "user1",
+                senderName: "Anda",
+                senderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                text: "Hari Sabtu bisa? Jam 10 pagi",
+                createdAt: new Date(Date.now() - 800000).toISOString(),
+              },
+            ],
+            lastMessage: "Hari Sabtu bisa? Jam 10 pagi",
+            lastMessageTime: new Date(Date.now() - 800000).toISOString(),
+            unreadCount: 2,
+          },
+        ];
+        
+        parsed.conversations = mockConversations;
+        localStorage.setItem("kerjaaja_data", JSON.stringify(parsed));
+      }
+
       useStore.getState().initializeFromLocalStorage();
 
       mockPosts.forEach((post, index) => {
